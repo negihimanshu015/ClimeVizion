@@ -1,30 +1,63 @@
-import { Canvas, useLoader } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { useRef } from "react";
 import { TextureLoader } from "three";
+import { OrbitControls } from "@react-three/drei";
 
-function Earth() {
-  const scene = useRef();
+function Earth() {  
+  const EarthRef = useRef();
+  const CloudRef = useRef();  
   const [chessTexture, normal] = useLoader(TextureLoader, [
-    "/earth_texture.jpg",
+    "/day.jpg",
     "/clouds.jpg",
   ]);
+  
+  useFrame(() => {
+    if (EarthRef.current) {
+      EarthRef.current.rotation.y += 0.001; // Rotate the Earth mesh around the y-axis
+    }
+  });
+
+  useFrame(() => {
+    if (CloudRef.current) {
+      CloudRef.current.rotation.y += 0.001; // Rotate the Earth mesh around the y-axis
+    }
+  });
+  
   return (
-    <Canvas ref={scene}>
+    <>
       <ambientLight intensity={2} />
-      <mesh scale={3}>
+      <mesh scale={3} ref={EarthRef}>
         <sphereGeometry args={[1, 64, 64]} />
-        <meshStandardMaterial map={chessTexture} />
+        <meshStandardMaterial map={chessTexture} />        
       </mesh>
-      <mesh scale={3}>
-        <sphereGeometry args={[1, 64, 64]} />
+      <mesh scale={3} ref={CloudRef}>
+        <sphereGeometry args={[1.008, 64, 64]} />
         <meshStandardMaterial
           map={normal}
-          transparent={true} // Enable transparency
-          opacity={0.5} // Adjust opacity for better visual
+          transparent={true}
+          opacity={0.5}
         />
-      </mesh>
+      </mesh>      
+    </>
+  );
+}
+
+function EarthScene() {
+  return (
+    <Canvas>
+      <ambientLight intensity={2} />
+      <Earth />
+      <OrbitControls 
+        enableZoom={true} 
+        enablePan={true} 
+        enableRotate={true} 
+        zoomSpeed={0.6} 
+        panSpeed={0.5} 
+        rotateSpeed={0.1} 
+      />
     </Canvas>
   );
 }
 
-export default Earth;
+
+export default EarthScene;
