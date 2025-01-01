@@ -8,7 +8,8 @@ function App() {
       <Earth />
       <div className="center">
       <button className="button is-white is-outlined is-large is-rounded ">Login &#8594;</button>
-    </div>                
+      <button className="button is-white is-outlined is-large is-rounded ">Login &#8594;</button>      
+      </div>                      
     </main>
   );
 }
