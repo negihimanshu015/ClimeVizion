@@ -33,7 +33,11 @@ function LocationPicker({ onLocationSelected }) {
 
 
 function ClimeVizion() {
-    const [climateData, setClimateData] = useState(null);
+    const [climateData, setClimateData] = useState({
+        temperature: '.....',
+        pressure: '.....',
+        windSpeed: '.....',
+    });
 
     const handleLocationSelect = async (location) => {
         console.log('Selected location:', location);
@@ -46,16 +50,25 @@ function ClimeVizion() {
             const response = await fetch(
                 `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`
             );
-            const data = await response.json();
-            console.log( data );
+            const data = await response.json();                              
+
+            const pressureRes = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=pressure_msl&timezone=auto`
+            );
+            const pressureData = await pressureRes.json();                       
+
             return {
                 temperature: data.current_weather?.temperature || '......',
-                co2: '.....',
-                seaLevel: '.....',
+                windSpeed: data.current_weather?.windspeed || '.....',
+                pressure: pressureData.hourly?.pressure_msl?.[0] || '.....',                
             };
         } catch (error) {
             console.error('Error fetching climate data:', error);
-            return null;
+            return {
+                temperature: '.....',
+                windSpeed: '.....',
+                pressure: '.....',
+            };
         }
     };
 
@@ -78,14 +91,14 @@ function ClimeVizion() {
                         </div>
                         <div className="column">
                             <div className="box">
-                                <h3 className="subtitle">CO2 Emission</h3>
-                                <p>{climateData ? climateData.co2 : 'Select a location on the map'}</p>
+                                <h3 className="subtitle">Wind Speed</h3>
+                                <p>{climateData ? `${climateData.windSpeed} km/h` : 'Select a location on the map'}</p>
                             </div>
                         </div>
                         <div className="column">
                             <div className="box">
-                                <h3 className="subtitle">Sea Level</h3>
-                                <p>{climateData ? climateData.seaLevel : 'Select a location on the map'}</p>
+                                <h3 className="subtitle">Atmospheric Pressure</h3>
+                                <p>{climateData ? `${climateData.pressure} hpa` : 'Select a location on the map'}</p>
                             </div>
                         </div>
                     </div>
