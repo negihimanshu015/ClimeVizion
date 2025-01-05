@@ -1,6 +1,36 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet/dist/leaflet.css';
+
+function SearchBar({ onLocationSelected }) {
+    const map = useMap();
+
+    React.useEffect(() => {
+        const provider = new OpenStreetMapProvider();
+
+        const searchControl = new GeoSearchControl({
+            provider,
+            style: 'bar', // Style of the search bar
+            autoClose: true,
+            showMarker: false,
+            retainZoomLevel: false,
+        });
+
+        map.addControl(searchControl);
+
+        // Event to handle location selection from the search bar
+        map.on('geosearch/showlocation', (event) => {
+            const { x: lng, y: lat } = event.location;
+            onLocationSelected({ lat, lng });
+        });
+
+        return () => map.removeControl(searchControl);
+    }, [map, onLocationSelected]);
+
+    return null;
+}
 
 function LocationPicker({ onLocationSelected }) {
     const [position, setPosition] = useState(null);
@@ -27,6 +57,7 @@ function LocationPicker({ onLocationSelected }) {
             />
             {position && <Marker position={position} />}
             <MapClick />
+            <SearchBar onLocationSelected={onLocationSelected} />
         </MapContainer>
     );
 }
@@ -39,8 +70,7 @@ function ClimeVizion() {
         windSpeed: '.....',
     });
 
-    const handleLocationSelect = async (location) => {
-        console.log('Selected location:', location);
+    const handleLocationSelect = async (location) => {        
         const data = await fetchClimateData(location.lat, location.lng);
         setClimateData(data);
     };
