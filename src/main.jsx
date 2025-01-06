@@ -1,14 +1,10 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './Front.jsx'
-import Nav from './Components/NavBar.jsx'
-import Content from './content.jsx'
-import ClimeVizion from './climate.jsx'
-import './index.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./styles/index.css";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Nav />
-    <ClimeVizion/>    
-  </StrictMode>,
-)
+    <App />
+  </StrictMode>
+);

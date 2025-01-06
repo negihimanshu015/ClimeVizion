@@ -1,150 +1,152 @@
-import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import 'leaflet-geosearch/dist/geosearch.css';
-import 'leaflet/dist/leaflet.css';
+import React, { useState } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import "leaflet-geosearch/dist/geosearch.css";
+import "leaflet/dist/leaflet.css";
+import "./styles/index.css";
 
 function SearchBar({ onLocationSelected }) {
-    const map = useMap();
+  const map = useMap();
 
-    React.useEffect(() => {
-        const provider = new OpenStreetMapProvider();
+  React.useEffect(() => {
+    const provider = new OpenStreetMapProvider();
 
-        const searchControl = new GeoSearchControl({
-            provider,
-            style: 'bar', // Style of the search bar
-            autoClose: true,
-            showMarker: false,
-            retainZoomLevel: false,
-        });
+    const searchControl = new GeoSearchControl({
+      provider,
+      style: "bar",
+      autoClose: true,
+      showMarker: false,
+      retainZoomLevel: false,
+    });
 
-        map.addControl(searchControl);
+    map.addControl(searchControl);
 
-        // Event to handle location selection from the search bar
-        map.on('geosearch/showlocation', (event) => {
-            const { x: lng, y: lat } = event.location;
-            onLocationSelected({ lat, lng });
-        });
+    map.on("geosearch/showlocation", (event) => {
+      const { x: lng, y: lat } = event.location;
+      onLocationSelected({ lat, lng });
+    });
 
-        return () => map.removeControl(searchControl);
-    }, [map, onLocationSelected]);
+    return () => map.removeControl(searchControl);
+  }, [map, onLocationSelected]);
 
-    return null;
+  return null;
 }
 
 function LocationPicker({ onLocationSelected }) {
-    const [position, setPosition] = useState(null);
+  const [position, setPosition] = useState(null);
 
-    const MapClick = () => {
-        useMapEvents({
-            click: (e) => {
-                setPosition(e.latlng);
-                onLocationSelected(e.latlng);
-            },
-        });
-        return null;
-    };
+  const MapClick = () => {
+    useMapEvents({
+      click: (e) => {
+        setPosition(e.latlng);
+        onLocationSelected(e.latlng);
+      },
+    });
+    return null;
+  };
 
-    return (
-        <MapContainer
-            center={[0, 0]}
-            zoom={2}
-            style={{ height: '400px', width: '100%' }}
-        >
-            <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="&copy; OpenStreetMap contributors"
-            />
-            {position && <Marker position={position} />}
-            <MapClick />
-            <SearchBar onLocationSelected={onLocationSelected} />
-        </MapContainer>
-    );
+  return (
+    <MapContainer
+      center={[0, 0]}
+      zoom={2}
+      style={{ height: "400px", width: "100%" }}
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="&copy; OpenStreetMap contributors"
+      />
+      {position && <Marker position={position} />}
+      <MapClick />
+      <SearchBar onLocationSelected={onLocationSelected} />
+    </MapContainer>
+  );
 }
 
-
 function ClimeVizion() {
-    const [climateData, setClimateData] = useState({
-        temperature: '.....',
-        pressure: '.....',
-        windSpeed: '.....',
-    });
+  const [climateData, setClimateData] = useState({
+    temperature: ".....",
+    pressure: ".....",
+    windSpeed: ".....",
+  });
 
-    const handleLocationSelect = async (location) => {        
-        const data = await fetchClimateData(location.lat, location.lng);
-        setClimateData(data);
-    };
+  const handleLocationSelect = async (location) => {
+    const data = await fetchClimateData(location.lat, location.lng);
+    setClimateData(data);
+  };
 
-    const fetchClimateData = async (lat, lng) => {
-        try {
-            const response = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`
-            );
-            const data = await response.json();                              
+  const fetchClimateData = async (lat, lng) => {
+    try {
+      const response = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`
+      );
+      const data = await response.json();
 
-            const pressureRes = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=pressure_msl&timezone=auto`
-            );
-            const pressureData = await pressureRes.json();                       
+      const pressureRes = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=pressure_msl&timezone=auto`
+      );
+      const pressureData = await pressureRes.json();
 
-            return {
-                temperature: data.current_weather?.temperature || '......',
-                windSpeed: data.current_weather?.windspeed || '.....',
-                pressure: pressureData.hourly?.pressure_msl?.[0] || '.....',                
-            };
-        } catch (error) {
-            console.error('Error fetching climate data:', error);
-            return {
-                temperature: '.....',
-                windSpeed: '.....',
-                pressure: '.....',
-            };
-        }
-    };
+      return {
+        temperature: data.current_weather?.temperature || "......",
+        windSpeed: data.current_weather?.windspeed || ".....",
+        pressure: pressureData.hourly?.pressure_msl?.[0] || ".....",
+      };
+    } catch (error) {
+      console.error("Error fetching climate data:", error);
+      return {
+        temperature: ".....",
+        windSpeed: ".....",
+        pressure: ".....",
+      };
+    }
+  };
 
-    return (
-        <div>
-            <section className="hero is-primary m-0">
-                <div className="hero-body">
-                    <p className="subtitle">Visualize Climate Data</p>
-                </div>
-            </section>
-            <section className="section is-medium">
-                <h2 className="title">Key Climate Metrics</h2>
-                <div className="container">
-                    <div className="columns">
-                        <div className="column">
-                            <div className="box">
-                                <h3 className="subtitle">Global Temperature</h3>
-                                <p>{climateData ? `${climateData.temperature}°C` : 'Select a location on the map'}</p>
-                            </div>
-                        </div>
-                        <div className="column">
-                            <div className="box">
-                                <h3 className="subtitle">Wind Speed</h3>
-                                <p>{climateData ? `${climateData.windSpeed} km/h` : 'Select a location on the map'}</p>
-                            </div>
-                        </div>
-                        <div className="column">
-                            <div className="box">
-                                <h3 className="subtitle">Atmospheric Pressure</h3>
-                                <p>{climateData ? `${climateData.pressure} hpa` : 'Select a location on the map'}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="box">
-                    <h2 className="subtitle">Location Map</h2>
-                    <LocationPicker onLocationSelected={handleLocationSelect} />
-                </div>
-            </section>
-            <footer className="footer">
-                <div className="content has-text-centered">
-                    <p>API Source: Open-Meteo</p>
-                </div>
-            </footer>
+  return (
+    <div>
+      <div className="box">
+        <LocationPicker onLocationSelected={handleLocationSelect} />
+      </div>
+      
+      <div className="columns is-mobile is-centered climate-data-container">
+        <div className="column m-4">
+          <div className="box has-text-centered">
+            <h3 className="subtitle">Temperature</h3>
+            <p className="is-size-5">
+              {climateData.temperature}°C
+            </p>
+          </div>
         </div>
-    );
+        <div className="column m-4">
+          <div className="box has-text-centered">
+            <h3 className="subtitle">Wind Speed</h3>
+            <p className="is-size-5">
+              {climateData.windSpeed} km/h
+            </p>
+          </div>
+        </div>
+        <div className="column m-4">
+          <div className="box has-text-centered">
+            <h3 className="subtitle">Pressure</h3>
+            <p className="is-size-5">
+              {climateData.pressure} hpa
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <footer className="footer">
+        <div className="content has-text-centered">
+          <p>API Source: Open-Meteo</p>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
 export default ClimeVizion;
