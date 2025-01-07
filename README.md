@@ -27,9 +27,3 @@ Make sure you have the following installed:
 - Node.js >= 14.x  
 - npm or yarn  
 
-### Installation  
-
-1. **Clone the Repository**  
-   ```bash
-   git clone https://github.com/your-username/climevizion.git
-   cd climevizion
