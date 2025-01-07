@@ -1,8 +1,35 @@
-# React + Vite
+# ClimeVizion
+**ClimeVizion** is an interactive React application that provides real-time climate data, such as temperature, wind speed, and atmospheric pressure, for any location worldwide. Users can either search for a location or select one directly on the map to visualize key climate metrics.  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## Features  
+- **Interactive Map**: Built using Leaflet for seamless navigation and location selection.  
+- **Search Bar**: Quickly locate a specific area using the geosearch functionality.  
+- **Key Metrics Display**: Real-time data on temperature, wind speed, and pressure using the Open-Meteo API.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
+
+## Tech Stack  
+- **Frontend**: React, React Router  
+- **UI Framework**: Bulma CSS  
+- **Map Integration**: Leaflet, React Leaflet  
+- **APIs**:  
+  - Open-Meteo API for climate data  
+  - OpenStreetMap for location services  
+
+---
+
+## Getting Started  
+
+### Prerequisites  
+Make sure you have the following installed:  
+- Node.js >= 14.x  
+- npm or yarn  
+
+### Installation  
+
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/your-username/climevizion.git
+   cd climevizion
