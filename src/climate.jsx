@@ -109,33 +109,34 @@ function ClimeVizion() {
 
   return (
     <div>
+      <div className="box has-text-centered">
+        <h2 className="title is-3">Interactive Climate Map</h2>
+        <p className="subtitle is-5">
+          Explore real-time climate data by selecting a location or using the
+          search bar above.
+        </p>        
+      </div>
       <div className="box">
         <LocationPicker onLocationSelected={handleLocationSelect} />
       </div>
-      
+
       <div className="columns is-mobile is-centered climate-data-container">
         <div className="column m-4">
           <div className="box has-text-centered">
             <h3 className="subtitle">Temperature</h3>
-            <p className="is-size-5">
-              {climateData.temperature}°C
-            </p>
+            <p className="is-size-5">{climateData.temperature}°C</p>
           </div>
         </div>
         <div className="column m-4">
           <div className="box has-text-centered">
             <h3 className="subtitle">Wind Speed</h3>
-            <p className="is-size-5">
-              {climateData.windSpeed} km/h
-            </p>
+            <p className="is-size-5">{climateData.windSpeed} km/h</p>
           </div>
         </div>
         <div className="column m-4">
           <div className="box has-text-centered">
             <h3 className="subtitle">Pressure</h3>
-            <p className="is-size-5">
-              {climateData.pressure} hpa
-            </p>
+            <p className="is-size-5">{climateData.pressure} hpa</p>
           </div>
         </div>
       </div>
