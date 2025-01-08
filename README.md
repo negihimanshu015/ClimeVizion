@@ -20,10 +20,31 @@
 
 ---
 
-## Getting Started  
+## APIs Used  
 
-### Prerequisites  
-Make sure you have the following installed:  
-- Node.js >= 14.x  
-- npm or yarn  
+### 1. **Open-Meteo API**  
+Provides real-time climate data, including temperature, wind speed, and pressure.  
+API documentation: [Open-Meteo](https://open-meteo.com/)
+
+---
+
+## Acknowledgement  
+
+We would like to acknowledge the following resources and organizations that made this project possible:  
+
+- **Open-Meteo**: For providing the free API to fetch real-time climate data.  
+- **Leaflet**: For the interactive mapping framework.  
+- **Leaflet GeoSearch**: For the geolocation search bar integration.  
+- **Bulma CSS**: For the clean and responsive design framework.  
+
+---
+
+## Contact  
+
+For any queries, suggestions, or collaborations, feel free to contact:  
+
+**Project Maintainer**:  
+- **Name**: Himanshu Negi 
+- **Email**: negihimanshu015@gmail.com  
+
 
