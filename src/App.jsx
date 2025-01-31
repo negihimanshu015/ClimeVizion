@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Front from "./Front";
-import Climate from "./Climate";
+import Climate from "./climate";
 
 const App = () => {
   return (
